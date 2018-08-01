@@ -1,0 +1,154 @@
+﻿/*Begining of Auto generated code by Atmel studio */
+#include <Arduino.h>
+#include "Corazon.h"
+/*End of auto generated code by Atmel studio */
+
+unsigned char modo=0;
+unsigned char enturno=0;
+unsigned int tiempo=0;
+
+
+//Salidas
+const int cruz1 = 5;	// Cruz interna (OC0B)
+const int cruz2 = 6;	// Cruz externa (OC0A)
+const int circ	= 3;	// Circunferencia externa (OC2B)
+const int turno = 11;	// Mensaje "de turno" (OC2A)
+
+//Entradas
+const int D0 = 14;	//DataIn0	(A0)
+const int D1 = 15;	//DataIn1	(A1)
+const int D2 = 16;	//DataIn2	(A2)
+const int D3 = 17;	//DataIn3	(A3)
+
+corazon latido1 = corazon(cruz1,0,10,20,10,60,40);
+corazon latido2 = corazon(cruz2,10,10,20,10,60,30);
+corazon latido3 = corazon(circ,40,30,40,0,0,30);
+
+ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remoto
+{
+	if(digitalRead(D0)==1){	//D0 cambia el modo al siguiente
+		modo++;
+		if(modo>3){modo=0;}
+	}
+	else if(digitalRead(D1)==1){	//D1 cambia el modo hacia atras
+		modo--;
+		if (modo==255){modo=3;}
+	}
+	else if(digitalRead(D2)==1){	//D2 enciende el mensaje "En turno"
+		digitalWrite(turno,HIGH);
+	}
+	else if(digitalRead(D2)==1){	//D3 apaga el mensaje "En turno"
+		digitalWrite(turno,LOW);
+	}
+}
+
+ISR(TIMER1_OVF_vect){	//Interrupcion por TMR1
+	TCNT1 = 0xB1E0;	//vuelve a precargar el timer para que desborde en 10ms
+	tiempo++;
+	if(tiempo>100){
+		tiempo=0;
+		if(enturno==1){
+			digitalWrite(turno,LOW);
+			enturno=0;
+		}
+		else{
+			enturno=1;
+			digitalWrite(turno,HIGH);
+			}
+	}	//Reinicia el valor de tiempo cada 1 segundo
+	latido1.latir();
+	latido2.latir();
+	latido3.latir();
+}
+
+void setup() {
+	//GPIO
+	pinMode(cruz1,OUTPUT);	
+	pinMode(cruz2,OUTPUT);
+	pinMode(circ,OUTPUT);
+	pinMode(turno,OUTPUT);
+	
+	pinMode(D0,INPUT);
+	pinMode(D1,INPUT);
+	pinMode(D2,INPUT);
+	pinMode(D3,INPUT);
+	
+	//Interrupciones
+	PCIFR = 0;	//Baja todas las banderas de interrupcion
+	PCICR = 0x02;	//Habilita las interrupciones por cambio desde A0 a A5
+<<<<<<< local
+	PCMSK1 = 0x0F;	//Habilita las interrupciones de A0:A4
+	
+	//Timers
+	TCCR1A = 0;
+	TCCR1B = 0x02;	//Prescaler 8
+	TIMSK1 = 0x01;	//Interrupcion por desborde
+	TCNT1 = 0xB1E0;	//Cuenta inicial para que desborde en 10ms
+	
+	//PWM
+	//No lo configuro porque uso el analogwrite de arduino
+	
+	
+=======
+>>>>>>> other
+	
+	digitalWrite(cruz1,LOW);
+	digitalWrite(cruz2,LOW);
+	digitalWrite(circ,LOW);
+	digitalWrite(turno,LOW);
+}
+
+void loop() {
+  switch(modo){
+	case 0:
+		
+		break;
+		
+	case 1:
+		digitalWrite(cruz1,HIGH);
+		delay(500);
+		digitalWrite(cruz2,HIGH);
+		delay(500);
+		digitalWrite(circ,HIGH);
+		delay(500);
+		
+		digitalWrite(cruz1,LOW);
+		delay(500);
+		digitalWrite(cruz2,LOW);
+		delay(500);
+		digitalWrite(circ,LOW);
+		delay(500);
+		break;
+		
+	case 2:
+		digitalWrite(cruz1,HIGH);
+		delay(200);
+		digitalWrite(cruz2,HIGH);
+		delay(200);
+		digitalWrite(circ,HIGH);
+		delay(200);
+		
+		digitalWrite(cruz1,LOW);
+		delay(200);
+		digitalWrite(cruz2,LOW);
+		delay(200);
+		digitalWrite(circ,LOW);
+		delay(200);
+		break;	
+		
+	case 3:
+		digitalWrite(circ,HIGH);
+		digitalWrite(cruz1,HIGH);
+		digitalWrite(cruz2,HIGH);
+		delay(500);
+		
+		digitalWrite(cruz1,LOW);
+		digitalWrite(cruz2,LOW);
+		delay(500);
+		break;
+	  
+	  default:
+	  break;	  
+  }
+
+}
