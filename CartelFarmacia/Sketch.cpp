@@ -1,5 +1,7 @@
 ﻿/*Begining of Auto generated code by Atmel studio */
 #include <Arduino.h>
+#include "Corazon.h"
+#include "OsciladorPWM.h"
 /*End of auto generated code by Atmel studio */
 
 
@@ -37,26 +39,29 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
 		modo++;
 		if(modo>3){modo=0;}
 		while(digitalRead(D0));	//Espera a que se suelte el boton
-		PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
+		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 	else if(digitalRead(D2)==1){	//D2 cambia el modo hacia atras
 		modo--;
 		if (modo==255){modo=3;}
 		while(digitalRead(D2));	//Espera a que se suelte el boton
-		PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
+		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 	else if(digitalRead(D1)==1){	//D1 enciende el mensaje "En turno"
 		digitalWrite(turno,HIGH);
 		while(digitalRead(D1));	//Espera a que se suelte el boton
-		PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
+		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 	else if(digitalRead(D3)==1){	//D3 apaga el mensaje "En turno"
 		digitalWrite(turno,LOW);
 		while(digitalRead(D3));	//Espera a que se suelte el boton
-		PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
+		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 	
 }
+
+
+
 
 
 void setup() {
