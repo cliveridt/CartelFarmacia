@@ -449,6 +449,7 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
      2d8:	80 e0       	ldi	r24, 0x00	; 0
      2da:	90 e0       	ldi	r25, 0x00	; 0
      2dc:	0e 94 32 07 	call	0xe64	; 0xe64 <delay>
+	//Boton B
 	if(digitalRead(D0)==1){	//D0 cambia el modo al siguiente
      2e0:	8e e0       	ldi	r24, 0x0E	; 14
      2e2:	0e 94 9c 08 	call	0x1138	; 0x1138 <digitalRead>
@@ -463,9 +464,9 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
 		if(modo>CANT_MODOS){modo=0;}
      2f8:	8a 30       	cpi	r24, 0x0A	; 10
      2fa:	18 f4       	brcc	.+6      	; 0x302 <__vector_4+0x50>
-ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remoto
 {
 	delay(500);		//Antirrebote
+	//Boton B
 	if(digitalRead(D0)==1){	//D0 cambia el modo al siguiente
 		automatico=0;
 		modo++;
@@ -480,6 +481,7 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
      30e:	d9 f7       	brne	.-10     	; 0x306 <__vector_4+0x54>
      310:	2e c0       	rjmp	.+92     	; 0x36e <__vector_4+0xbc>
 	}
+	//Boton A
 	else if(digitalRead(D2)==1){	//D2 activa el modo automatico. Se desactiva cambiando el modo manualmente (D0)
      312:	80 e1       	ldi	r24, 0x10	; 16
      314:	0e 94 9c 08 	call	0x1138	; 0x1138 <digitalRead>
@@ -496,6 +498,7 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
      32e:	d9 f7       	brne	.-10     	; 0x326 <__vector_4+0x74>
      330:	1e c0       	rjmp	.+60     	; 0x36e <__vector_4+0xbc>
 	}
+	//Boton D
 	else if(digitalRead(D1)==1){	//D1 enciende el mensaje "En turno"
      332:	8f e0       	ldi	r24, 0x0F	; 15
      334:	0e 94 9c 08 	call	0x1138	; 0x1138 <digitalRead>
@@ -511,6 +514,7 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
      34a:	d9 f7       	brne	.-10     	; 0x342 <__vector_4+0x90>
      34c:	10 c0       	rjmp	.+32     	; 0x36e <__vector_4+0xbc>
 	}
+	//Boton C
 	else if(digitalRead(D3)==1){	//D3 apaga el mensaje "En turno"
      34e:	81 e1       	ldi	r24, 0x11	; 17
      350:	0e 94 9c 08 	call	0x1138	; 0x1138 <digitalRead>

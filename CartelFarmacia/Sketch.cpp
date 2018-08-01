@@ -63,20 +63,24 @@ osciladorPWM TURNO = osciladorPWM(turno,255,0,100,100,100,100);
 ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remoto
 {
 	delay(500);		//Antirrebote
+	//Boton B
 	if(digitalRead(D0)==1){	//D0 cambia el modo al siguiente
 		automatico=0;
 		modo++;
 		if(modo>CANT_MODOS){modo=0;}
 		while(digitalRead(D0));	//Espera a que se suelte el boton
 	}
+	//Boton A
 	else if(digitalRead(D2)==1){	//D2 activa el modo automatico. Se desactiva cambiando el modo manualmente (D0)
 		automatico=1;		
 		while(digitalRead(D2));	//Espera a que se suelte el boton
 	}
+	//Boton D
 	else if(digitalRead(D1)==1){	//D1 enciende el mensaje "En turno"
 		enturno=1;
 		while(digitalRead(D1));	//Espera a que se suelte el boton
 	}
+	//Boton C
 	else if(digitalRead(D3)==1){	//D3 apaga el mensaje "En turno"
 		enturno=0;
 		digitalWrite(turno,LOW);
