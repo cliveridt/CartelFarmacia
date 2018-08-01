@@ -68,25 +68,19 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
 		modo++;
 		if(modo>CANT_MODOS){modo=0;}
 		while(digitalRead(D0));	//Espera a que se suelte el boton
-		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
-	else if(digitalRead(D2)==1){	//D2 cambia el modo hacia atras
-		automatico=0;		
-		modo--;
-		if (modo==255){modo=CANT_MODOS;}
+	else if(digitalRead(D2)==1){	//D2 activa el modo automatico. Se desactiva cambiando el modo manualmente (D0)
+		automatico=1;		
 		while(digitalRead(D2));	//Espera a que se suelte el boton
-		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 	else if(digitalRead(D1)==1){	//D1 enciende el mensaje "En turno"
 		enturno=1;
 		while(digitalRead(D1));	//Espera a que se suelte el boton
-		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 	else if(digitalRead(D3)==1){	//D3 apaga el mensaje "En turno"
 		enturno=0;
 		digitalWrite(turno,LOW);
 		while(digitalRead(D3));	//Espera a que se suelte el boton
-		//PCIFR=0;				//Limpia la bandera para no volver a entrar en la interrupcion
 	}
 
 }
@@ -94,7 +88,7 @@ ISR (PCINT1_vect) // Interrupciones por cambio en las entradas del control remot
 ISR(TIMER1_OVF_vect){
 	TCNT1 = 0xB1E0;		//Precarga para que desborde en 10ms
 	t_auto++;			//Cuenta las veces que desbordo para cambiar el modo cuando esta en automatico
-	if(t_auto>5000 && automatico==1){
+	if(t_auto>1000 && automatico==1){
 		modo++;
 		if(modo>CANT_MODOS){modo=0;}
 		t_auto=0;	
